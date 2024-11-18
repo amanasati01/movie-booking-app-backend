@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String
+  password String
+  tickets  Ticket[]
+}
+
+model Ticket {
+  id       Int      @id @default(autoincrement())
+  movie    String
+  startAt  DateTime
+  endAt    DateTime
+  theater  String
+  seatNo   String
+  seatType String
+  amount   Int      @default(0)
+  buyer    User     @relation(fields: [buyerId], references: [id])
+  buyerId  Int
+}
+
+model Theater {
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  location String
+  seats    Seat[]
+}
+
+model Seat {
+  id         Int        @id @default(autoincrement())
+  number     String
+  seatType   String
+  status     SeatStatus @default(AVAILABLE)
+  theaterId  Int
+  theater    Theater    @relation(fields: [theaterId], references: [id])
+  showtimeId Int
+  showtime   Showtime   @relation(fields: [showtimeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SeatStatus {
+  AVAILABLE
+  BLOCKED
+  SELECTED
+  BOOKED
+}
+
+model Showtime {
+  id      Int    @id @default(autoincrement())
+  time    String
+  movieId Int
+  movie   Movie  @relation(fields: [movieId], references: [id])
+  seats   Seat[]
+}
+
+model Movie {
+  id        Int        @id @default(autoincrement())
+  title     String     @unique
+  duration  Int
+  showtimes Showtime[]
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Showtime" ALTER COLUMN "time" SET DATA TYPE TEXT;

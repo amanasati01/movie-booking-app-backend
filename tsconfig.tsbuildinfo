@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/index.ts","./src/api/controllers/usercontoller.ts","./src/api/routes/signin.ts","./src/api/routes/userroutes.ts","./src/api/utils/apierror.ts","./src/api/utils/apiresponse.ts"],"version":"5.6.2"}
